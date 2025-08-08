@@ -7,6 +7,8 @@ from .models import Expense
 from .forms import ExpenseForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db import models
+
 
 @login_required
 def expense_list(request):
@@ -59,3 +61,27 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 # Create your views here.
+
+
+from .models import Category
+from .forms import CategoryForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+
+@login_required
+def category_list(request):
+    categories = Category.objects.filter(models.Q(user=request.user) | models.Q(user__isnull=True))
+    return render(request, 'expenses/category_list.html', {'categories': categories})
+
+@login_required
+def category_add(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.user = request.user
+            category.save()
+            return redirect('category_list')
+    else:
+        form = CategoryForm()
+    return render(request, 'expenses/category_form.html', {'form': form})

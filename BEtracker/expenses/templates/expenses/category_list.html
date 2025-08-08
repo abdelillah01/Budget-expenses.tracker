@@ -1,0 +1,9 @@
+<h2>Your Categories</h2>
+<a href="{% url 'category_add' %}">Add Category</a>
+<ul>
+  {% for category in categories %}
+    <li>{{ category.name }}</li>
+  {% empty %}
+    <li>No categories yet.</li>
+  {% endfor %}
+</ul>
