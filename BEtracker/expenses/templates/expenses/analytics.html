@@ -1,17 +1,36 @@
 {% extends 'base.html' %}
-{% include "expenses/navbar.html" %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
+<div class="space-y-12">
 
-<h2>Expense Analytics</h2>
-<canvas id="monthlyChart" width="400" height="200"></canvas>
-<canvas id="categoryChart" width="400" height="200"></canvas>
+    <div class="text-center">
+        <h2 class="text-3xl font-bold text-cyan-400 mb-2">📊 Expense Analytics</h2>
+        <p class="text-gray-300">Visual overview of your spending</p>
+    </div>
+
+    <!-- Monthly Expenses Chart -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow-md max-w-md mx-auto">
+        <h3 class="text-xl font-semibold text-blue-300 mb-4">Monthly Spending</h3>
+        <div class="relative h-64 w-full">
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Category Expenses Chart -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow-md max-w-md mx-auto">
+        <h3 class="text-xl font-semibold text-pink-300 mb-4">By Category</h3>
+        <div class="relative h-64 w-full">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+</div>
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Monthly expenses bar chart
     const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
     new Chart(ctxMonthly, {
         type: 'bar',
@@ -21,29 +40,56 @@
                 label: 'Total Spent',
                 data: {{ month_totals|safe }},
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#ccc' },
+                    grid: { color: '#333' }
+                },
+                x: {
+                    ticks: { color: '#ccc' },
+                    grid: { color: '#333' }
+                }
+            }
         }
     });
 
-    // Category expenses pie chart
     const ctxCategory = document.getElementById('categoryChart').getContext('2d');
     new Chart(ctxCategory, {
         type: 'pie',
         data: {
             labels: {{ categories|safe }},
             datasets: [{
-                label: 'By Category',
                 data: {{ category_totals|safe }},
                 backgroundColor: [
-                    'rgba(255,99,132,0.6)',
-                    'rgba(54,162,235,0.6)',
-                    'rgba(255,206,86,0.6)',
-                    'rgba(75,192,192,0.6)',
-                    'rgba(153,102,255,0.6)',
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)'
                 ],
+                borderColor: '#1f2937',
+                borderWidth: 1
             }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#ccc'
+                    }
+                }
+            }
         }
     });
 </script>
-
 {% endblock %}
