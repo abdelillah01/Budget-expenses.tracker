@@ -8,4 +8,6 @@ urlpatterns = [
     path('delete/<int:pk>/', views.expense_delete, name='expense_delete'),
     path('categories/', views.category_list, name='category_list'),
     path('categories/add/', views.category_add, name='category_add'),
+    path('categories/delete/<int:pk>/', views.category_delete, name='category_delete'),
+    path('analytics/', views.analytics, name='analytics'),
 ]

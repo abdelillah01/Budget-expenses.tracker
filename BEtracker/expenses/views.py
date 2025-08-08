@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 
 
+def home(request):
+    return render(request, "home.html")
+
+
 @login_required
 def expense_list(request):
     expenses = Expense.objects.filter(user=request.user).order_by('-date')
@@ -85,3 +89,51 @@ def category_add(request):
     else:
         form = CategoryForm()
     return render(request, 'expenses/category_form.html', {'form': form})
+
+
+@login_required
+def category_delete(request, pk):
+    category = get_object_or_404(Category, pk=pk, user=request.user)
+    if request.method == "POST":
+        category.delete()
+        return redirect("category_list")
+    return render(request, "expenses/category_confirm_delete.html", {"category": category})
+
+# Analytics view to summarize expenses
+from django.shortcuts import render
+from django.db.models import Sum
+from django.db.models.functions import TruncMonth
+from .models import Expense, Category
+
+@login_required
+def analytics(request):
+    # Monthly totals
+    monthly_data = (
+        Expense.objects.filter(user=request.user)
+        .annotate(month=TruncMonth('date'))
+        .values('month')
+        .annotate(total=Sum('amount'))
+        .order_by('month')
+    )
+
+    # Category totals
+    category_data = (
+        Expense.objects.filter(user=request.user)
+        .values('category__name')
+        .annotate(total=Sum('amount'))
+        .order_by('-total')
+    )
+
+    # Format data for Chart.js
+    months = [str(d['month'])[:7] for d in monthly_data]  # 'YYYY-MM'
+    month_totals = [float(d['total']) for d in monthly_data]
+
+    categories = [d['category__name'] for d in category_data]
+    category_totals = [float(d['total']) for d in category_data]
+
+    return render(request, "expenses/analytics.html", {
+        "months": months,
+        "month_totals": month_totals,
+        "categories": categories,
+        "category_totals": category_totals,
+    })

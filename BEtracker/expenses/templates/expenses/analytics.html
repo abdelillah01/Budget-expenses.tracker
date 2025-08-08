@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% include "expenses/navbar.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<h2>Expense Analytics</h2>
+<canvas id="monthlyChart" width="400" height="200"></canvas>
+<canvas id="categoryChart" width="400" height="200"></canvas>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Monthly expenses bar chart
+    const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(ctxMonthly, {
+        type: 'bar',
+        data: {
+            labels: {{ months|safe }},
+            datasets: [{
+                label: 'Total Spent',
+                data: {{ month_totals|safe }},
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            }]
+        }
+    });
+
+    // Category expenses pie chart
+    const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctxCategory, {
+        type: 'pie',
+        data: {
+            labels: {{ categories|safe }},
+            datasets: [{
+                label: 'By Category',
+                data: {{ category_totals|safe }},
+                backgroundColor: [
+                    'rgba(255,99,132,0.6)',
+                    'rgba(54,162,235,0.6)',
+                    'rgba(255,206,86,0.6)',
+                    'rgba(75,192,192,0.6)',
+                    'rgba(153,102,255,0.6)',
+                ],
+            }]
+        }
+    });
+</script>
+
+{% endblock %}

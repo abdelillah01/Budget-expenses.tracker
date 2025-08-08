@@ -1,7 +1,63 @@
-<h2>Add Category</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
-<a href="{% url 'category_list' %}">Back to categories</a>
+<!-- templates/categories/category_form.html -->
+{% extends 'base.html' %}
+{% include "expenses/navbar.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        input, select, textarea {
+            background-color: #1f2937 !important; /* gray-800 */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-black via-gray-900 to-black text-gray-100 min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="glass w-full max-w-lg rounded-2xl shadow-lg p-10 space-y-8">
+        <h2 class="text-3xl font-bold text-cyan-400 text-center">📁 Add Category</h2>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-1">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-400 text-sm mt-1">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <button type="submit"
+                    class="w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-md transition transform hover:scale-[1.02]">
+                ➕ Save Category
+            </button>
+        </form>
+
+        <div class="text-center pt-2">
+            <a href="{% url 'category_list' %}"
+               class="text-cyan-400 hover:underline transition">← Back to categories</a>
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}

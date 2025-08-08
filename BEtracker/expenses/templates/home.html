@@ -1,0 +1,55 @@
+
+{% extends 'base.html' %}
+{% include "expenses/navbar.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass {
+            background: rgba(24, 24, 27, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-black via-gray-900 to-black text-gray-100 min-h-screen flex items-center justify-center px-4">
+    <div class="glass max-w-lg w-full text-center px-8 py-12 rounded-2xl shadow-2xl space-y-8">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            Welcome to Expense Tracker
+        </h1>
+
+        <p class="text-lg text-gray-300">Track your spending. Stay in control. Make smart financial decisions.</p>
+
+        <a href="{% url 'expense_list' %}"
+           class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+            💰 View Expenses
+        </a>
+
+        {% if user.is_authenticated %}
+            <p class="text-lg text-green-400 mt-6">👋 Welcome back, <span class="font-semibold">{{ user.username }}</span>!</p>
+        {% else %}
+            <div class="mt-6 flex items-center justify-center gap-6 text-base">
+                <a href="{% url 'login' %}" class="text-cyan-400 hover:underline transition">🔐 Login</a>
+                <span class="text-gray-500">or</span>
+                <a href="{% url 'register' %}" class="text-cyan-400 hover:underline transition">📝 Register</a>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+
+
+{% endblock %}
