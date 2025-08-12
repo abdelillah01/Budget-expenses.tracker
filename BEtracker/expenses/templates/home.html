@@ -2,32 +2,58 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black px-4 py-16">
-    <div class="glass max-w-lg w-full text-center px-8 py-12 rounded-2xl shadow-2xl space-y-8">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-            Welcome to Expense Tracker
-        </h1>
+<div class="min-h-screen flex flex-col justify-between bg-gradient-to-b from-black via-gray-900 to-black">
+    
+    <!-- Main Content -->
+    <main class="flex flex-col flex-grow items-center justify-center px-4 py-16">
+        <div class="glass max-w-lg w-full text-center px-8 py-12 rounded-2xl shadow-2xl space-y-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+                Welcome to Expense Tracker
+            </h1>
 
-        <p class="text-lg text-gray-300">
-            Track your spending. Stay in control. Make smart financial decisions.
-        </p>
-
-        <a href="{% url 'expense_list' %}"
-           class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 transform hover:scale-105">
-            💰 View Expenses
-        </a>
-
-        {% if user.is_authenticated %}
-            <p class="text-lg text-green-400 mt-6">
-                👋 Welcome back, <span class="font-semibold">{{ user.username }}</span>!
+            <p class="text-lg text-gray-300">
+                Track your spending. Stay in control. Make smart financial decisions.
             </p>
-        {% else %}
-            <div class="mt-6 flex items-center justify-center gap-6 text-base">
-                <a href="{% url 'login' %}" class="text-cyan-400 hover:underline transition">🔐 Login</a>
-                <span class="text-gray-500">or</span>
-                <a href="{% url 'register' %}" class="text-cyan-400 hover:underline transition">📝 Register</a>
+
+            <a href="{% url 'expense_list' %}"
+            class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-full shadow-lg transition duration-300 transform hover:scale-105">
+                💰 View Expenses
+            </a>
+
+            {% if user.is_authenticated %}
+                <p class="text-lg text-green-400 mt-6">
+                    👋 Welcome back, <span class="font-semibold">{{ user.username }}</span>!
+                </p>
+            {% else %}
+                <div class="mt-6 flex items-center justify-center gap-6 text-base">
+                    <a href="{% url 'login' %}" class="text-cyan-400 hover:underline transition">🔐 Login</a>
+                    <span class="text-gray-500">or</span>
+                    <a href="{% url 'register' %}" class="text-cyan-400 hover:underline transition">📝 Register</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black bg-opacity-60 text-gray-400 text-sm py-4 mt-8 backdrop-blur-md border-t border-gray-800">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center px-4">
+            <p>© {{ now|date:"Y" }} Created by <span class="text-cyan-400 font-semibold">abdelillah01</span></p>
+
+            <div class="flex gap-4 mt-2 md:mt-0">
+                <a href="/" class="hover:text-cyan-400 transition">Home</a>
+                <a href="https://github.com/yourgithub" target="_blank" class="hover:text-cyan-400 transition">GitHub</a>
+                <a href="mailto:youremail@example.com" class="hover:text-cyan-400 transition">Contact</a>
             </div>
-        {% endif %}
-    </div>
+
+            <div class="flex gap-3 mt-2 md:mt-0 text-lg">
+                <a href="https://linkedin.com/in/yourlinkedin" target="_blank" class="hover:text-cyan-400 transition"><i class="fab fa-linkedin"></i></a>
+                <a href="https://github.com/yourgithub" target="_blank" class="hover:text-cyan-400 transition"><i class="fab fa-github"></i></a>
+                <a href="mailto:youremail@example.com" class="hover:text-cyan-400 transition"><i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
+    </footer>
 </div>
+
+<!-- FontAwesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 {% endblock %}
