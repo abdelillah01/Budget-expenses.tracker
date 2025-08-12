@@ -137,3 +137,41 @@ def analytics(request):
         "categories": categories,
         "category_totals": category_totals,
     })
+
+
+from .models import Budget, Expense
+from .forms import BudgetForm
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.db.models import Sum
+
+@login_required
+def manage_budget(request):
+    budget, created = Budget.objects.get_or_create(
+        user=request.user, defaults={'amount': 0}
+    )
+    if request.method == 'POST':
+        form = BudgetForm(request.POST, instance=budget)
+        if form.is_valid():
+            form.save()
+            return redirect('manage_budget')
+    else:
+        form = BudgetForm(instance=budget)
+    # Calculate spent amount this month
+    
+    
+    from datetime import date
+    from django.db.models.functions import TruncMonth
+    today = date.today()
+    month_spent = Expense.objects.filter(
+        user=request.user, 
+        date__year=today.year, date__month=today.month
+    ).aggregate(Sum("amount"))['amount__sum'] or 0
+    remaining = budget.amount - month_spent
+
+    return render(request, "expenses/budget.html", {
+        "form": form,
+        "budget": budget.amount,
+        "spent": month_spent,
+        "remaining": remaining,
+    })

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Manage Your Budget{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-b from-black via-gray-900 to-black p-4">
+    <div class="glass w-full max-w-lg rounded-2xl shadow-lg p-8 space-y-8 text-gray-100">
+        <h2 class="text-3xl font-bold text-cyan-400 text-center">💰 Manage Your Budget</h2>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" 
+                    class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                💾 Update Budget
+            </button>
+        </form>
+
+        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 space-y-2">
+            <p class="text-lg">📊 <span class="font-semibold">Total Budget:</span> {{ budget }}</p>
+            <p class="text-lg">💸 <span class="font-semibold">Spent This Month:</span> {{ spent }}</p>
+            <p class="text-lg font-bold text-cyan-300">💎 Remaining: {{ remaining }}</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .glass {
+        background: rgba(24, 24, 27, 0.6);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+</style>
+{% endblock %}

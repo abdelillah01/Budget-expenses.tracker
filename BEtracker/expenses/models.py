@@ -16,5 +16,16 @@ class Expense(models.Model):
     date = models.DateField()
     description = models.CharField(max_length=255, blank=True)
 
+class Budget(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+
+    def __str__(self):
+        return f"{self.user.username}'s Budget"
+
+    
+    
+    
     def __str__(self):
         return f"{self.amount} on {self.date} ({self.category})"
