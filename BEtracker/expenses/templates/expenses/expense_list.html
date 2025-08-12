@@ -1,39 +1,69 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Your Expenses{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black px-4 py-12">
-    <div class="glass w-full max-w-4xl rounded-2xl shadow-lg p-8 space-y-8">
-        <div class="flex items-center justify-between">
-            <h2 class="text-3xl font-bold text-cyan-400">💼 Your Expenses</h2>
+<div class="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black px-4 py-12">
+    <div class="glass w-full max-w-6xl mx-auto rounded-2xl shadow-lg p-8 space-y-8">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <h2 class="text-3xl font-extrabold text-cyan-400 flex items-center gap-2">
+                💼 Your Expenses
+            </h2>
             <a href="{% url 'expense_add' %}"
-               class="inline-block px-4 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-semibold rounded-md transition">
+               class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold rounded-lg shadow transition-transform transform hover:scale-105">
                 ➕ Add New
             </a>
         </div>
 
+        <!-- Small Total Transactions Badge -->
+        <div class="flex items-center justify-end">
+            <span class="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-full border border-yellow-400/40 bg-yellow-500/10 text-yellow-300 shadow-sm">
+                📊 Total Transactions: <span class="font-bold">{{ expenses|length }}</span>
+            </span>
+        </div>
+
         {% if expenses %}
-            <ul class="divide-y divide-gray-700">
+            <!-- Expenses Grid -->
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-4 animate-fadeIn">
                 {% for expense in expenses %}
-                    <li class="py-4 flex justify-between items-center">
-                        <div class="space-y-1">
-                            <p class="text-lg font-medium text-white">
-                                {{ expense.amount }} DA
-                            </p>
-                            <p class="text-sm text-gray-400">
-                                {{ expense.date }} — {{ expense.category }}
-                            </p>
-                        </div>
-                        <div class="space-x-3">
-                            <a href="{% url 'expense_edit' expense.pk %}" class="text-blue-400 hover:underline"> Edit</a>
-                            <a href="{% url 'expense_delete' expense.pk %}" class="text-red-400 hover:underline"> Delete</a>
-                        </div>
-                    </li>
+                <div class="bg-gray-800/60 backdrop-blur-md rounded-xl p-5 shadow-lg border border-gray-700 hover:border-cyan-500 transition-all duration-200 transform hover:scale-105">
+                    
+                    <!-- Amount -->
+                    <p class="text-2xl font-bold text-cyan-300">
+                        {{ expense.amount }} <span class="text-sm text-gray-400">DA</span>
+                    </p>
+
+                    <!-- Date & Category -->
+                    <p class="text-sm text-gray-400 mt-1 flex items-center gap-2">
+                        {{ expense.date|date:"M d, Y" }}
+                        <span class="px-2 py-0.5 text-xs font-medium rounded-full border bg-cyan-500/20 text-cyan-300 border-cyan-500/40">
+                            {% if expense.category == "Food" %}🍔{% elif expense.category == "Transport" %}🚗{% elif expense.category == "Shopping" %}🛍{% elif expense.category == "Bills" %}💡{% else %}📦{% endif %}
+                            {{ expense.category }}
+                        </span>
+                    </p>
+                    
+                    <!-- Actions -->
+                    <div class="mt-4 flex justify-end gap-4">
+                        <a href="{% url 'expense_edit' expense.pk %}"
+                           class="text-blue-400 hover:text-blue-300 font-medium transition">✏️ Edit</a>
+                        <a href="{% url 'expense_delete' expense.pk %}"
+                           class="text-red-400 hover:text-red-300 font-medium transition">🗑 Delete</a>
+                    </div>
+                </div>
                 {% endfor %}
-            </ul>
+            </div>
         {% else %}
-            <div class="text-center text-gray-400 mt-6">
-                <p>No expenses yet. Start tracking your spending!</p>
+            <!-- Empty State -->
+            <div class="text-center mt-12 space-y-4">
+                <img src="{% static 'images/empty_expenses.png' %}" 
+                     alt="No expenses" class="mx-auto w-28 opacity-60">
+                <p class="text-gray-400 text-lg">No expenses yet. Start tracking your spending!</p>
+                <a href="{% url 'expense_add' %}" 
+                   class="px-4 py-2 bg-cyan-500 hover:bg-cyan-600 rounded-lg text-white font-semibold transition">
+                   ➕ Add Your First Expense
+                </a>
             </div>
         {% endif %}
     </div>

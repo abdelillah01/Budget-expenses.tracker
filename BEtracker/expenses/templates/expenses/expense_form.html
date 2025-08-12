@@ -3,10 +3,15 @@
 
 {% block content %}
 <div class="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black px-4 py-12">
-    <div class="glass w-full max-w-xl rounded-2xl shadow-lg p-10 space-y-8">
-        <h2 class="text-3xl font-bold text-cyan-400 text-center"> Add Expense</h2>
+    <div class="glass w-full max-w-xl rounded-2xl shadow-lg p-8 space-y-6">
+        
+        <!-- Page Title -->
+        <h2 class="text-2xl font-bold text-cyan-400 text-center tracking-wide border-b border-gray-700 pb-2">
+            Add Expense
+        </h2>
 
-        <form method="post" class="space-y-6">
+        <!-- Form -->
+        <form method="post" class="space-y-5">
             {% csrf_token %}
             {% for field in form %}
                 <div>
@@ -15,7 +20,7 @@
                     </label>
                     {{ field }}
                     {% if field.name == "category" %}
-                        <div class="mt-2">
+                        <div class="mt-1">
                             <a href="{% url 'category_add' %}" class="text-sm text-cyan-300 hover:underline">
                                 + Create New Category
                             </a>
@@ -27,15 +32,17 @@
                 </div>
             {% endfor %}
 
+            <!-- Save Button -->
             <button type="submit"
-                    class="w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-md transition transform hover:scale-[1.02]">
-                    Save Expense
+                class="w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold rounded-lg shadow-md transition transform hover:scale-[1.02]">
+                Save Expense
             </button>
         </form>
 
-        <div class="text-center pt-2">
+        <!-- Back Link -->
+        <div class="text-center pt-1">
             <a href="{% url 'expense_list' %}" class="text-cyan-400 hover:underline transition">
-                ← Back to expenses
+                ← Back to Expenses
             </a>
         </div>
     </div>
