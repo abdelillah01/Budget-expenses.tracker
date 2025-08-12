@@ -25,15 +25,15 @@
           <ul class="absolute left-0 mt-2 w-44 bg-gray-800 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transform scale-95 group-hover:scale-100 transition origin-top z-50">
             <li>
               <a href="{% url 'expense_list' %}" 
-                 class="block px-4 py-2 hover:bg-gray-700 rounded-t-lg {% if request.resolver_match.url_name == 'expense_list' %}text-cyan-400{% endif %}">💰 Expenses</a>
+                 class="block px-4 py-2 hover:bg-gray-700 rounded-t-lg {% if request.resolver_match.url_name == 'expense_list' %}text-cyan-400{% endif %}"> Expenses</a>
             </li>
             <li>
               <a href="{% url 'category_list' %}" 
-                 class="block px-4 py-2 hover:bg-gray-700 {% if request.resolver_match.url_name == 'category_list' %}text-cyan-400{% endif %}">📂 Categories</a>
+                 class="block px-4 py-2 hover:bg-gray-700 {% if request.resolver_match.url_name == 'category_list' %}text-cyan-400{% endif %}"> Categories</a>
             </li>
             <li>
               <a href="{% url 'manage_budget' %}" 
-                 class="block px-4 py-2 hover:bg-gray-700 rounded-b-lg {% if request.resolver_match.url_name == 'manage_budget' %}text-cyan-400{% endif %}">💵 Budget</a>
+                 class="block px-4 py-2 hover:bg-gray-700 rounded-b-lg {% if request.resolver_match.url_name == 'manage_budget' %}text-cyan-400{% endif %}"> Budget</a>
             </li>
           </ul>
         </li>
@@ -42,7 +42,7 @@
         <li>
           <a href="{% url 'analytics' %}" 
              class="transition duration-200 ease-in-out {% if request.resolver_match.url_name == 'analytics' %}text-cyan-400 border-b-2 border-cyan-400{% else %}hover:text-cyan-400{% endif %}">
-            📊 Analytics
+             Analytics
           </a>
         </li>
 
@@ -50,10 +50,10 @@
         {% if user.is_authenticated and navbar_budget %}
           <li>
             <span id="budget-pill" 
-                  class="bg-yellow-300 text-black px-3 py-1 rounded-full font-semibold shadow-sm cursor-pointer transition-opacity duration-300 ease-in-out"
-                  title="Click to toggle">
-              💵 {{ navbar_budget_remaining }} left
-            </span>
+      class="bg-blue-500 text-white px-3 py-1 rounded-full font-semibold shadow-sm cursor-pointer transition-opacity duration-300 ease-in-out"
+      title="Click to toggle">
+  💵 {{ navbar_budget_remaining }} left
+</span>
           </li>
         {% endif %}
       </ul>
