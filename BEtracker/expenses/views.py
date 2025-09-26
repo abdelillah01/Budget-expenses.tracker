@@ -10,8 +10,47 @@ from django.contrib.auth.decorators import login_required
 from django.db import models
 
 
+from datetime import date, timedelta
+from django.utils import timezone
+from django.shortcuts import render
+from expenses.models import Expense
+
 def home(request):
-    return render(request, "home.html")
+    expenses = []
+    budget_amount = spent_this_month = remaining_budget = None
+    current_filter = request.GET.get('filter', 'day')
+    
+    if request.user.is_authenticated:
+        today = timezone.localdate()
+        queryset = Expense.objects.filter(user=request.user)
+        if current_filter == 'day':
+            expenses = queryset.filter(date=today)
+        elif current_filter == 'week':
+            start_week = today - timedelta(days=today.weekday())
+            end_week = start_week + timedelta(days=6)
+            expenses = queryset.filter(date__range=[start_week, end_week])
+        elif current_filter == 'month':
+            expenses = queryset.filter(date__year=today.year, date__month=today.month)
+        else:
+            expenses = queryset.none()
+        # Budget quick summary
+        try:
+            budget = Budget.objects.get(user=request.user)
+            budget_amount = budget.amount
+        except Budget.DoesNotExist:
+            budget_amount = None
+        spent_this_month = queryset.filter(date__year=today.year, date__month=today.month).aggregate(
+            total=Sum("amount"))["total"] or 0
+        remaining_budget = budget_amount - spent_this_month if budget_amount is not None else None
+
+    context = {
+        'expenses': expenses,
+        'current_filter': current_filter,
+        'budget_amount': budget_amount,
+        'spent_this_month': spent_this_month,
+        'remaining_budget': remaining_budget,
+    }
+    return render(request, 'home.html', context)
 
 
 @login_required
