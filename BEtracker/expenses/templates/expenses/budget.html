@@ -2,33 +2,61 @@
 {% block title %}Manage Your Budget{% endblock %}
 
 {% block content %}
-<div class="flex justify-center items-center min-h-screen bg-gradient-to-b from-black via-gray-900 to-black p-4">
-    <div class="glass w-full max-w-lg rounded-2xl shadow-lg p-8 space-y-8 text-gray-100">
+<div class="min-h-screen flex flex-col justify-center items-center text-gray-100">
+
+    <!-- Glass Container -->
+    <div class="glass w-full max-w-lg rounded-2xl shadow-lg p-8 space-y-8">
+        
+        <!-- Page Title -->
         <h2 class="text-3xl font-bold text-cyan-400 text-center">💰 Manage Your Budget</h2>
 
-        <form method="post" class="space-y-4">
+        <!-- Budget Form -->
+        <form method="post" class="space-y-5">
             {% csrf_token %}
-            {{ form.as_p }}
+            {% for field in form %}
+                <div>
+                    <label class="block text-sm font-semibold text-gray-300 mb-1">
+                        {{ field.label }}
+                    </label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-400 text-sm mt-1">{{ field.errors|striptags }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
             <button type="submit" 
-                    class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                    class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition transform hover:scale-[1.02]">
                 💾 Update Budget
             </button>
         </form>
 
-        <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4 space-y-2">
-            <p class="text-lg">📊 <span class="font-semibold">Total Budget:</span> {{ budget }}</p>
-            <p class="text-lg">💸 <span class="font-semibold">Spent This Month:</span> {{ spent }}</p>
-            <p class="text-lg font-bold text-cyan-300">💎 Remaining: {{ remaining }}</p>
+        <!-- Budget Summary -->
+        <div class="bg-gray-800/70 backdrop-blur-md rounded-lg p-4 space-y-2 border border-gray-700">
+            <p class="text-lg">
+                📊 <span class="font-semibold">Total Budget:</span> 
+                <span class="text-gray-200">{{ budget }}</span>
+            </p>
+            <p class="text-lg">
+                💸 <span class="font-semibold">Spent This Month:</span> 
+                <span class="text-red-300">{{ spent }}</span>
+            </p>
+            <p class="text-lg font-bold text-cyan-300">
+                💎 Remaining: {{ remaining }}
+            </p>
         </div>
     </div>
+
 </div>
 
 <style>
-    .glass {
-        background: rgba(24, 24, 27, 0.6);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Darker input fields (matching your Add Expense page) */
+    input, select, textarea {
+        background-color: #1a1a1a !important;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        width: 100%;
     }
 </style>
 {% endblock %}
