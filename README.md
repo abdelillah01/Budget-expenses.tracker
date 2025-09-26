@@ -1,7 +1,7 @@
 # Expense Tracker – Django Project
 
 <p align="center">
-  <img src="assets/screenshot.png" alt="Expense Tracker Screenshot" width="800">
+  <img src="BEtracker/assets/screenshot.png" alt="Expense Tracker Screenshot" width="800">
   <br>
   <strong>Main Dashboard – Track your expenses and budget in one place</strong>
 </p>
